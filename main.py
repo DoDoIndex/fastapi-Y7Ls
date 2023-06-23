@@ -92,8 +92,8 @@ async def root():
 async def demo_get():
     try:
         return {"message": "This is /path endpoint, use a {}".format(writeContainerStl(50,50,50,1))}
-    except:
-        return {"message": "/path made a boom boom!"}
+    except Exception as e:
+        return {"message": "/path made a boom boom! {}".format(str(e))}
 
 
 
