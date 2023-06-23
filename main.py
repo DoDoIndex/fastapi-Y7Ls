@@ -68,8 +68,11 @@ def writeContainerStl(l,w,h,t):
     from stl import Mode
     from sshfs import SSHFileSystem
     import uuid
+    import time
     
+    start = time.time()
     verts = ContainerVerts(l,w,h,t,True)
+    time1 = time.time()
     # Create the data for the cube
     data = np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype)
     # Create the mesh object
@@ -77,12 +80,15 @@ def writeContainerStl(l,w,h,t):
     for i, f in enumerate(faces):
         for j in range(3):
             cMesh.vectors[i][j] = verts[f[j],:]
+    time2 = time.time()
     fs = SSHFileSystem( "217.23.4.125", username="admin_rizztest", password="cT7Q2LTfvG")
+    time3 = time.time()
     filename = "{}.stl".format(uuid.uuid4())
     with fs.open(filename, 'wb') as fh:
         cMesh.save(filename, fh, mode=Mode.BINARY)
+    time4 = time.time()
     # Save the mesh to an STL file
-    return "https://static-test.3drizz.com/{}".format(filename)
+    return "https://static-test.3drizz.com/{}, time1 {}, time2{}, time3{}, time4 {}".format(filename, time1-start, time2-time1, time3-time2, time4-time3)
 
 class Msg(BaseModel):
     msg: str
