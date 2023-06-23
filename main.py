@@ -65,6 +65,7 @@ faces = np.array([\
 
 def writeContainerStl(l,w,h,t):
     from stl import mesh 
+    from sshfs import SSHFileSystem
     verts = ContainerVerts(l,w,h,t,True)
     # Create the data for the cube
     data = np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype)
@@ -73,10 +74,12 @@ def writeContainerStl(l,w,h,t):
     for i, f in enumerate(faces):
         for j in range(3):
             mesh.vectors[i][j] = verts[f[j],:]
-
+    fs = SSHFileSystem( "217.23.4.125", username="admin_rizztest", password="cT7Q2LTfvG")
+    filename = "container.stl"
+    with fs.open(filename, 'wb') as fh:
+        mesh.save(filename, fh)
     # Save the mesh to an STL file
-    return "{}".format(verts)
-    #mesh.save('container.stl')
+    return "https://static-test.3drizz.com/{}".format(filename)
 
 class Msg(BaseModel):
     msg: str
