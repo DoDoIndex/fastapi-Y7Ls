@@ -1,10 +1,8 @@
+import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
-
-import numpy as np
-from stl import mesh
 
 def UnitCubeVerts():
     return np.array([
@@ -66,6 +64,7 @@ faces = np.array([\
     ])
 
 def writeContainerStl(l,w,h,t):
+    from stl import mesh 
     verts = ContainerVerts(l,w,h,t,True)
     # Create the data for the cube
     data = np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype)
