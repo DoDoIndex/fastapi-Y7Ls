@@ -88,7 +88,7 @@ def writeContainerStl(l,w,h,t):
         cMesh.save(filename, fh, mode=Mode.BINARY)
     time4 = time.time()
     # Save the mesh to an STL file
-    return "https://static-test.3drizz.com/{}, time1 {}, time2{}, time3{}, time4 {}".format(filename, time1-start, time2-time1, time3-time2, time4-time3)
+    return "https://static-test.3drizz.com/{}, time1 {}, time2 {}, time3 {}, time4 {}".format(filename, time1-start, time2-time1, time3-time2, time4-time3)
 
 class Msg(BaseModel):
     msg: str
