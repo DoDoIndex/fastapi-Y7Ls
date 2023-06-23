@@ -80,7 +80,7 @@ def writeContainerStl(l,w,h,t):
     fs = SSHFileSystem( "217.23.4.125", username="admin_rizztest", password="cT7Q2LTfvG")
     filename = "{}.stl".format(uuid.uuid4())
     with fs.open(filename, 'wb') as fh:
-        cMesh.save(filename, fh, mode=Mode.ASCII)
+        cMesh.save(filename, fh, mode=Mode.BINARY)
     # Save the mesh to an STL file
     return "https://static-test.3drizz.com/{}".format(filename)
 
