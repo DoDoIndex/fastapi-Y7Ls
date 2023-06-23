@@ -67,6 +67,7 @@ def writeContainerStl(l,w,h,t):
     from stl import mesh 
     from stl import Mode
     from sshfs import SSHFileSystem
+    import uuid
     
     verts = ContainerVerts(l,w,h,t,True)
     # Create the data for the cube
@@ -77,7 +78,7 @@ def writeContainerStl(l,w,h,t):
         for j in range(3):
             cMesh.vectors[i][j] = verts[f[j],:]
     fs = SSHFileSystem( "217.23.4.125", username="admin_rizztest", password="cT7Q2LTfvG")
-    filename = "container.stl"
+    filename = "{}.stl".format(uuid.uuid4())
     with fs.open(filename, 'wb') as fh:
         cMesh.save(filename, fh, mode=Mode.ASCII)
     # Save the mesh to an STL file
