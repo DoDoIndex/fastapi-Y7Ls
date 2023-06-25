@@ -70,6 +70,7 @@ def upload_google_cloud_storage (filename, path, bucket_name):
     from dotenv import load_dotenv
     load_dotenv()
 
+    # NEED NEW SERVICE ACCOUNT
     CREDENTIALS = {
         "type": os.getenv("GOOGLE_STORAGE_type"),
         "project_id": os.getenv("GOOGLE_STORAGE_project_id"),

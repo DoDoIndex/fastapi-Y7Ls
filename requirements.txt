@@ -16,6 +16,5 @@ watchfiles==0.18.1
 websockets==10.4
 numpy
 numpy-stl
-SSHFileSystem
 python-dotenv
 google-cloud-storage==1.37.0
