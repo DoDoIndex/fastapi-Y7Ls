@@ -68,6 +68,7 @@ def writeContainerStl(l,w,h,t):
     from stl import Mode
     from sshfs import SSHFileSystem
     from google.cloud import storage
+    from google.oauth2 import service_account
     import uuid
     import time
     import os
@@ -89,13 +90,16 @@ def writeContainerStl(l,w,h,t):
     project_id = os.getenv("GOOGLE_CLOUD_STORAGE_PROJECT_ID")
     client_email = os.getenv("GOOGLE_CLOUD_STORAGE_CLIENT_EMAIL")
     private_key = os.getenv("GOOGLE_CLOUD_STORAGE_PRIVATE_KEY")
-    credentials = {
+
+    credentials_dict = {
         "type": "service_account",
         "project_id": project_id,
         "client_email": client_email,
         "private_key": private_key,
     }
-    # storage_client = storage.Client.from_service_account_info(credentials)
+
+    credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+    storage_client = storage.Client.from_service_account_info(project='teak-listener-390900', credentials)
     return "SUCCESS 22z {} {} {}".format(private_key, client_email, private_key)
 
     # return storage_credentials['project_id']
