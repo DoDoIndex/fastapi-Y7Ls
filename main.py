@@ -96,7 +96,7 @@ def writeContainerStl(l,w,h,t):
         "private_key": private_key,
     }
     storage_client = storage.Client.from_service_account_info(credentials)
-    return "SUCCESS 22z"
+    return "SUCCESS 22z {}".format(private_key)
 
     # return storage_credentials['project_id']
 
