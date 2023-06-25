@@ -1,7 +1,6 @@
 import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel
-import os
 
 app = FastAPI()
 
@@ -71,6 +70,8 @@ def writeContainerStl(l,w,h,t):
     from google.cloud import storage
     import uuid
     import time
+    import os
+    import json
     
     start = time.time()
     verts = ContainerVerts(l,w,h,t,True)
@@ -85,8 +86,10 @@ def writeContainerStl(l,w,h,t):
     
     stl_filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
 
-    storage_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    return storage_credentials
+    storage_credentials_string = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    storage_credentials = json.loads(storage_credentials_string)
+    storage_client = storage.Client.from_service_account_json(storage_credentials)
+    return "SUCCESS"
 
     # Save the mesh to a temporary file
     with NamedTemporaryFile(suffix='.stl', delete=True) as temp_file:
