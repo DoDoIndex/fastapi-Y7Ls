@@ -1,6 +1,7 @@
 import numpy as np
 from fastapi import FastAPI
 from pydantic import BaseModel
+import os
 
 app = FastAPI()
 
@@ -67,6 +68,7 @@ def writeContainerStl(l,w,h,t):
     from stl import mesh 
     from stl import Mode
     from sshfs import SSHFileSystem
+    from google.cloud import storage
     import uuid
     import time
     
@@ -80,15 +82,34 @@ def writeContainerStl(l,w,h,t):
     for i, f in enumerate(faces):
         for j in range(3):
             cMesh.vectors[i][j] = verts[f[j],:]
-    time2 = time.time()
-    fs = SSHFileSystem( "217.23.4.125", username="admin_rizztest", password="cT7Q2LTfvG")
-    time3 = time.time()
-    filename = "{}.stl".format(uuid.uuid4())
-    with fs.open(filename, 'wb') as fh:
-        cMesh.save(filename, fh, mode=Mode.BINARY)
-    time4 = time.time()
-    # Save the mesh to an STL file
-    return "https://static-test.3drizz.com/{}, time1 {}, time2 {}, time3 {}, time4 {}".format(filename, time1-start, time2-time1, time3-time2, time4-time3)
+    
+    stl_filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
+
+    # Save the mesh to a temporary file
+    with NamedTemporaryFile(suffix='.stl', delete=True) as temp_file:
+        cMesh.save(temp_file.name, mode=Mode.ASCII)
+
+        # Upload the file to Google Cloud Storage
+        storage_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+        storage_client = storage.Client.from_service_account_json(storage_credentials)
+        bucket_name = "stl-bucket-public-v1-3drizz "
+        destination_blob_name = stl_filename
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_filename(temp_file.name)
+
+    url = f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}"
+    return url
+
+    # time2 = time.time()
+    # fs = SSHFileSystem( "217.23.4.125", username="admin_rizztest", password="cT7Q2LTfvG")
+    # time3 = time.time()
+    # filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
+    # with fs.open(filename, 'wb') as fh:
+    #     cMesh.save(filename, fh, mode=Mode.BINARY)
+    # time4 = time.time()
+    # # Save the mesh to an STL file
+    # return "https://static-test.3drizz.com/{}, time1 {}, time2 {}, time3 {}, time4 {}".format(filename, time1-start, time2-time1, time3-time2, time4-time3)
 
 class Msg(BaseModel):
     msg: str
@@ -102,7 +123,7 @@ async def root():
 @app.get("/path")
 async def demo_get():
     try:
-        return {"message": "This is /path endpoint, use a {}".format(writeContainerStl(50,50,50,1))}
+        return {"url": "{}".format(writeContainerStl(50,50,50,1))}
     except Exception as e:
         return {"message": "/path made a boom boom! {}".format(str(e))}
 

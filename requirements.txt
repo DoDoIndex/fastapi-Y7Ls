@@ -17,3 +17,4 @@ websockets==10.4
 numpy
 numpy-stl
 sshfs
+google-cloud-storage
