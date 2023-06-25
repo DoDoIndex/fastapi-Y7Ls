@@ -105,7 +105,7 @@ def writeContainerStl(l,w,h,t):
         "universe_domain": "googleapis.com"
     }
     credentials = service_account.Credentials.from_service_account_info(credentials_dict)
-    client = storage.Client(project='teak-listener-390900', credentials=credentials)
+    client = storage.Client(project=None, credentials=credentials)
     return "SUCCESS 22eeez {} {} {}".format(private_key, client_email, private_key)
 
     # return storage_credentials['project_id']
