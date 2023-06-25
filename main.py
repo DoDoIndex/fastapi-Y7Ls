@@ -85,6 +85,8 @@ def writeContainerStl(l,w,h,t):
     
     stl_filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
 
+    return stl_filename
+
     # Save the mesh to a temporary file
     with NamedTemporaryFile(suffix='.stl', delete=True) as temp_file:
         cMesh.save(temp_file.name, mode=Mode.ASCII)
@@ -122,10 +124,11 @@ async def root():
 
 @app.get("/path")
 async def demo_get():
-    try:
-        return {"url": "{}".format(writeContainerStl(50,50,50,1))}
-    except Exception as e:
-        return {"message": "/path made a boom boom! {}".format(str(e))}
+    return {"url": "{}".format(writeContainerStl(50,50,50,1))}
+    # try:
+    #     return {"url": "{}".format(writeContainerStl(50,50,50,1))}
+    # except Exception as e:
+    #     return {"message": "/path made a boom boom! {}".format(str(e))}
 
 
 
