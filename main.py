@@ -97,9 +97,8 @@ def writeContainerStl(l,w,h,t):
         "client_email": client_email,
         "private_key": private_key,
     }
-
     credentials = service_account.Credentials.from_service_account_info(credentials_dict)
-    storage_client = storage.Client.from_service_account_info(project='teak-listener-390900', credentials)
+    storage_client = storage.Client(project='teak-listener-390900', credentials=credentials)
     return "SUCCESS 22eeez {} {} {}".format(private_key, client_email, private_key)
 
     # return storage_credentials['project_id']
