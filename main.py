@@ -85,14 +85,15 @@ def writeContainerStl(l,w,h,t):
     
     stl_filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
 
-    return stl_filename
-
     # Save the mesh to a temporary file
     with NamedTemporaryFile(suffix='.stl', delete=True) as temp_file:
         cMesh.save(temp_file.name, mode=Mode.ASCII)
 
         # Upload the file to Google Cloud Storage
         storage_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+        return storage_credentials
+
         storage_client = storage.Client.from_service_account_json(storage_credentials)
         bucket_name = "stl-bucket-public-v1-3drizz "
         destination_blob_name = stl_filename
