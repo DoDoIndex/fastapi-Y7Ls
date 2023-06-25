@@ -86,10 +86,10 @@ def writeContainerStl(l,w,h,t):
     
     stl_filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
 
-    # storage_credentials_string = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    # storage_credentials = json.loads(storage_credentials_string)
-    storage_client = storage.Client.from_service_account_json('./test-creds.json')
-    return "SUCCESS"
+    storage_credentials_string = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    storage_credentials = json.loads(storage_credentials_string)
+    storage_client = storage.Client.from_service_account_info(storage_credentials)
+    return "SUCCESS 22"
     # return storage_credentials['project_id']
 
     # Save the mesh to a temporary file
