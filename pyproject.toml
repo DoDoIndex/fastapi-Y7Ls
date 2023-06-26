@@ -9,6 +9,10 @@ license = "MIT"
 python = "^3.10"
 fastapi = "^0.80.0"
 uvicorn = "^0.18.3"
+numpy = "^1.25.0"
+numpy-stl = "^3.0.1"
+python-dotenv = "^1.0.0"
+google-cloud-storage = "^2.9.0"
 
 [tool.poetry.dev-dependencies]
 
