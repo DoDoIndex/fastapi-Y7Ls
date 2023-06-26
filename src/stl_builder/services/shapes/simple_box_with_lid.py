@@ -102,7 +102,7 @@ def create_shape(length, width, height, thickness):
         cMesh.save(temp_file.name, mode=Mode.ASCII)
         # Upload to Google Cloud Storage
         box = {
-            "label": "Simple Box",
+            "label": "Box",
             "url": upload_google_cloud_storage(
                 filename, temp_file.name, "stl-bucket-public-v1-3drizz"
             ),
