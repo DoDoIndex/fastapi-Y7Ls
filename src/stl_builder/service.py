@@ -46,7 +46,7 @@ faces = np.array(
 )
 
 
-def UnitCubeVerts():
+def unit_cube_verts():
     return np.array(
         [
             # bottom square
@@ -63,17 +63,17 @@ def UnitCubeVerts():
     )
 
 
-def RectVerts(length: float, width: float, height: float):
-    return UnitCubeVerts() * [length, width, height]
+def rect_verts(length: float, width: float, height: float):
+    return unit_cube_verts() * [length, width, height]
 
 
-def ContainerVerts(l, w, h, thickness, grow_in=True):
-    outerBox = RectVerts(l, w, h)
+def container_verts(l, w, h, thickness, grow_in=True):
+    outerBox = rect_verts(l, w, h)
     if not grow_in:
         thickness *= -1.0
     outerBoxoffset = [thickness, thickness, thickness]
 
-    innerBox = RectVerts(l + 2 * thickness, w + 2 * thickness, h + thickness)
+    innerBox = rect_verts(l + 2 * thickness, w + 2 * thickness, h + thickness)
     outerBox += outerBoxoffset
 
     return np.concatenate((outerBox, innerBox), axis=0)
@@ -89,8 +89,8 @@ def upload_google_cloud_storage(filename, path, bucket_name):
     return f"https://storage.googleapis.com/{bucket_name}/{filename}"
 
 
-def write_container_stl(l, w, h, t):
-    verts = ContainerVerts(l, w, h, t, True)
+def write_container_stl(length, width, height, thickness):
+    verts = container_verts(length, width, height, thickness, True)
     # Create the data for the cube
     data = np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype)
     # Create the mesh object
@@ -99,7 +99,7 @@ def write_container_stl(l, w, h, t):
         for j in range(3):
             cMesh.vectors[i][j] = verts[f[j], :]
 
-    filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), l, w, h, t)
+    filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), length, width, height, thickness)
 
     # Save the mesh to a temporary file
     with tempfile.NamedTemporaryFile(suffix=".stl", delete=True) as temp_file:
