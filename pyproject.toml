@@ -13,6 +13,8 @@ numpy = "^1.25.0"
 numpy-stl = "^3.0.1"
 python-dotenv = "^1.0.0"
 google-cloud-storage = "^2.9.0"
+black = "^23.3.0"
+ruff = "^0.0.275"
 
 [tool.poetry.dev-dependencies]
 

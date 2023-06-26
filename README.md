@@ -15,3 +15,7 @@
 ## Add Dependency
 - `poetry add firebase-admin`
 - `poetry export --format=requirements.txt --without-hashes > requirements.txt`
+
+## Before Push run the following
+- `ruff .` linter
+- `black .` formater
