@@ -15,6 +15,7 @@ python-dotenv = "^1.0.0"
 google-cloud-storage = "^2.9.0"
 black = "^23.3.0"
 ruff = "^0.0.275"
+python-multipart = "^0.0.6"
 
 [tool.poetry.dev-dependencies]
 

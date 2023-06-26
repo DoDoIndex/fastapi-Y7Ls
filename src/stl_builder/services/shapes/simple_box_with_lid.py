@@ -4,9 +4,8 @@ import tempfile
 import numpy as np
 from stl import mesh
 from stl import Mode
-import google.cloud.storage as gcs
 
-from .settings import settings
+from ..service import upload_google_cloud_storage
 
 
 # Define the 10 triangles composing the outside of the box
@@ -67,29 +66,24 @@ def rect_verts(length: float, width: float, height: float):
     return unit_cube_verts() * [length, width, height]
 
 
-def container_verts(l, w, h, thickness, grow_in=True):
-    outerBox = rect_verts(l, w, h)
+def container_verts(
+    length: float, width: float, height: float, thickness, grow_in=True
+):
+    outerBox = rect_verts(length, width, height)
     if not grow_in:
         thickness *= -1.0
     outerBoxoffset = [thickness, thickness, thickness]
 
-    innerBox = rect_verts(l + 2 * thickness, w + 2 * thickness, h + thickness)
+    innerBox = rect_verts(
+        length + 2 * thickness, width + 2 * thickness, height + thickness
+    )
     outerBox += outerBoxoffset
 
     return np.concatenate((outerBox, innerBox), axis=0)
 
 
-def upload_google_cloud_storage(filename, path, bucket_name):
-    client = gcs.Client.from_service_account_info(settings.GOOGLE_CLOUD_STORAGE)
-    blob = client.bucket(bucket_name).blob(filename)
-    blob.upload_from_filename(path)
-    blob.acl.all().grant_read()
-    blob.acl.save()
-
-    return f"https://storage.googleapis.com/{bucket_name}/{filename}"
-
-
-def write_container_stl(length, width, height, thickness):
+def create_shape(length, width, height, thickness):
+    # BOX
     verts = container_verts(length, width, height, thickness, True)
     # Create the data for the cube
     data = np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype)
@@ -99,12 +93,21 @@ def write_container_stl(length, width, height, thickness):
         for j in range(3):
             cMesh.vectors[i][j] = verts[f[j], :]
 
-    filename = "{}_{}x{}x{}x{}.stl".format(uuid.uuid4(), length, width, height, thickness)
+    filename = "{}_{}x{}x{}x{}.stl".format(
+        uuid.uuid4(), length, width, height, thickness
+    )
 
     # Save the mesh to a temporary file
     with tempfile.NamedTemporaryFile(suffix=".stl", delete=True) as temp_file:
         cMesh.save(temp_file.name, mode=Mode.ASCII)
         # Upload to Google Cloud Storage
-        return upload_google_cloud_storage(
-            filename, temp_file.name, "stl-bucket-public-v1-3drizz"
-        )
+        box = {
+            "label": "Simple Box",
+            "url": upload_google_cloud_storage(
+                filename, temp_file.name, "stl-bucket-public-v1-3drizz"
+            ),
+        }
+
+    # LID
+    lid = {"label": "Lid", "url": "TBD"}
+    return [box, lid]
