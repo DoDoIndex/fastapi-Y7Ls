@@ -1,29 +1,17 @@
----
-title: FastAPI
-description: A FastAPI server
-tags:
-  - fastapi
-  - python
----
-
-# FastAPI Example
-
-This example starts up a [FastAPI](https://fastapi.tiangolo.com/) server.
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/-NvLj4?referralCode=milo)
-## ✨ Features
-
+## Features
 - FastAPI
 - Python 3
 
-## 💁‍♀️ How to use
+## Prerequisite
+- Install Python
+- Install [Poetry](https://python-poetry.org/docs/) globally
+- Clone this repo locally
+- `poetry install` to install all dependencies inside `pyproject.toml`
+- `poetry shell` to get into virtual env, isolate from global env 
 
-- Deploy using the button 👆
-- Clone locally and install packages with Pip using `pip install -r requirements.txt` or Poetry using `poetry install`
-- Connect to your project using `railway link`
-- Run locally using `uvicorn main:app --reload`
+## To Run
+- `uvicorn src.stl_builder.main:app --reload`
 
-## 📝 Notes
-
-- To learn about how to use FastAPI with most of its features, you can visit the [FastAPI Documentation](https://fastapi.tiangolo.com/tutorial/).
-- FastAPI provides automatic documentation to call and test your API directly from the browser. You can access it at `/docs` with [Swagger](https://github.com/swagger-api/swagger-ui) or at `/redoc` with [Redoc](https://github.com/Rebilly/ReDoc).
+## Add Dependency
+- `poetry add firebase-admin`
+- `poetry export --format=requirements.txt --without-hashes > requirements.txt`
