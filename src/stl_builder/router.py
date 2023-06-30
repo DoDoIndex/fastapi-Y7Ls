@@ -27,6 +27,12 @@ async def create_shapes(data: ShapeData):
         height = data.meta_data.height
         thickness = data.meta_data.thickness
         return JSONResponse(content=create_simple_box(length, width, height, thickness))
+    if data.shape == "simple_box_with_lid":
+        length = data.meta_data.length
+        width = data.meta_data.width
+        height = data.meta_data.height
+        thickness = data.meta_data.thickness
+        return JSONResponse(content=simple_box_with_lid(length, width, height, thickness))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=[{"msg": "invalid shape"}]
