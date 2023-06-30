@@ -144,12 +144,15 @@ def box_verts(
     )
     outerBox += outerBoxoffset
 
-    return np.concatenate((outerBox, innerBox), axis=0)
+    if not grow_in:
+        return  np.concatenate((outerBox, innerBox), axis=0)
+    else:
+        return  np.concatenate((innerBox, outerBox), axis=0)
 
 def lid_verts(
     length: float,width: float,height: float,thickness: float
 ):
-    lidtop = rect_verts(length, width, height)
+    lidtop = rect_verts(length, width, thickness)
     bottomoffset = [thickness,thickness,-thickness]
 
     lidbottom = rect_verts(length-2*thickness,width-2*thickness,thickness)
